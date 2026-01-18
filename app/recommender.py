@@ -113,6 +113,10 @@ def recommend_random_movie(
         (df["vote_count"] >= min_votes) &
         (df["year"] >= 1990)
     ]
+    if df.empty:
+        return {
+            "error": "No movies match your criteria. Try lowering rating, votes, or genre selection."
+    }
 
     # Remove already recommended movies
     df = df[~df["imdb_id"].astype(str).isin(history)]

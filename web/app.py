@@ -23,14 +23,59 @@ def home():
     if request.method == "POST":
         print("Form data:", request.form)
 
-        min_rating = request.form.get("rating")
-        min_votes = request.form.get("votes")
+        rating_raw = request.form.get("rating")
+        votes_raw = request.form.get("votes")
+
+        try:
+            min_rating = float(rating_raw)
+            min_votes = int(votes_raw)
+        except (TypeError, ValueError):
+            return render_template(
+                "index.html",
+                movie=None,
+                genres=get_all_genres(),
+                error="Please enter valid numeric values for rating and votes."
+            )
+
+        if not (0 <= min_rating <= 10):
+            return render_template(
+                "index.html",
+                movie=None,
+                genres=get_all_genres(),
+                error="IMDb rating must be between 0 and 10."
+            )
+
+        if min_votes < 0:
+            return render_template(
+                "index.html",
+                movie=None,
+                genres=get_all_genres(),
+                error="Vote count cannot be negative."
+            )
+        # IMDb realistic sanity checks (soft warnings)
+        if min_rating > 9.3:
+            return render_template(
+                "index.html",
+                movie=None,
+                genres=get_all_genres(),
+                error="IMDb ratings rarely exceed 9.3. Try a value between 6.0 and 9.0."
+            )
+
+        if min_votes > 34495:
+            return render_template(
+                "index.html",
+                movie=None,
+                genres=get_all_genres(),
+                error="Very few movies have over 1,000,000 votes. Try a lower vote count."
+            )
+
+
+        
 
         print("rating raw:", min_rating)
         print("votes raw:", min_votes)
 
-        min_rating = float(min_rating)
-        min_votes = int(min_votes)
+        
 
         movie = recommend_random_movie(
             min_rating,

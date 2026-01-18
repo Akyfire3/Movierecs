@@ -25,10 +25,13 @@
                 <input
                     type="number"
                     step="0.1"
+                    min="0"
+                    max="9.4"
                     name="rating"
                     id="rating"
                     value="{{ request.form.rating if request.form.rating else '' }}"
                     required
+                    placeholder="6.0 – 9.0"
                 >
             </div>
 
@@ -36,10 +39,12 @@
                 <label>Minimum Vote Count</label>
                 <input
                     type="number"
+                    min="0"
+                    max="34495"
                     name="votes"
                     id="votes"
                     value="{{ request.form.votes if request.form.votes else '' }}"
-                    placeholder="e.g. 20000"
+                    placeholder="Recommended: up to 34000"
                     required
                 >
             </div>
@@ -79,9 +84,21 @@
             <button type="submit">🎥 Recommend Movie</button>
         </form>
     </div>
+    {% if error %}
+<div class="error-box">
+    ⚠️ {{ error }}
+</div>
+{% endif %}
+
 
     <!-- ================= MOVIE CARD ================= -->
-    {% if movie %}
+    {% if movie and not movie.error %}
+    {% if movie and movie.error %}
+    <div class="error-box">
+        ⚠️ {{ movie.error }}
+    </div>
+    {% endif %}
+
     <div class="movie-card poster-layout animate" id="movie-card">
 
         <div class="poster-section">
