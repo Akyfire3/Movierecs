@@ -17,9 +17,7 @@ from app.recommender import recommend_random_movie, get_all_genres
 app = Flask(__name__)
 @app.route("/sitemap.xml")
 def sitemap():
-    root_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    return send_from_directory(root_dir, "sitemap.xml")
-
+    return send_from_directory("static", "sitemap.xml")
 @app.route("/", methods=["GET", "POST"])
 def home():
     genres = get_all_genres()
