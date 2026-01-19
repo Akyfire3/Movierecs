@@ -2,6 +2,11 @@ from flask import Flask, render_template, request, jsonify
 import os
 import sys
 
+from flask import send_from_directory
+
+
+
+
 # ---- Fix import path ----
 PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 sys.path.insert(0, PROJECT_ROOT)
@@ -10,7 +15,10 @@ from app.recommender import recommend_random_movie, get_all_genres
 
 
 app = Flask(__name__)
-
+@app.route("/sitemap.xml")
+def sitemap():
+    root_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    return send_from_directory(root_dir, "sitemap.xml")
 
 @app.route("/", methods=["GET", "POST"])
 def home():
