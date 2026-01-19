@@ -4,8 +4,7 @@ import sys
 
 from flask import send_from_directory
 
-
-
+from flask import Response
 
 # ---- Fix import path ----
 PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
@@ -20,6 +19,14 @@ app = Flask(
     static_url_path=""
 )
 
+@app.route("/robots.txt")
+def robots():
+    robots_txt = """User-agent: *
+        Allow: /
+
+        Sitemap: https://movierecs-st0d.onrender.com/sitemap.xml
+        """
+    return Response(robots_txt, mimetype="text/plain")
 
 @app.route("/", methods=["GET", "POST"])
 def home():
