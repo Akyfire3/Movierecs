@@ -14,10 +14,13 @@ sys.path.insert(0, PROJECT_ROOT)
 from app.recommender import recommend_random_movie, get_all_genres
 
 
-app = Flask(__name__)
-@app.route("/sitemap.xml")
-def sitemap():
-    return send_from_directory("static", "sitemap.xml")
+app = Flask(
+    __name__,
+    static_folder="static",
+    static_url_path=""
+)
+
+
 @app.route("/", methods=["GET", "POST"])
 def home():
     genres = get_all_genres()
